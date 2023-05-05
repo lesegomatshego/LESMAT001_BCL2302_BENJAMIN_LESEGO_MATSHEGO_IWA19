@@ -75,24 +75,34 @@ const detailsToggle = (event) => {
     event.target.dataset.image ? image1.setAttribute ('src', event.target.dataset.image) : undefined;
     event.target.dataset.image ? imageblur.setAttribute ('src', event.target.dataset.image) : undefined;
 };
+
 const detailsClose = document.querySelector('[data-list-close]')
 detailsClose.addEventListener('click', (event) => {
 document.querySelector("[data-list-active]").style.display = "none";
 })
-const bookclick = document.querySelector('[data-list-items]')
-bookclick.addEventListener('click', detailsToggle)
+const bookclick = document.querySelector('[data-list-items]');
+bookclick.addEventListener('click', detailsToggle);
+const allauthorsOption = document.createElement('option'); // create a new option element
+allauthorsOption.value = 'any';
+allauthorsOption.textContent = 'All authors'; // use textContent instead of innerText
 const authorSelect = document.querySelector("[data-search-authors]");
+authorSelect.appendChild(allauthorsOption); // add the new option element to the select
 for (const authorId in authors) {
-  const optionElement = document.createElement('option')
-  optionElement.value = authorId
-  optionElement.textContent = authors[authorId]
-  authorSelect.appendChild(optionElement)
+  const optionElement = document.createElement('option');
+  optionElement.value = authorId;
+  optionElement.textContent = authors[authorId];
+  authorSelect.appendChild(optionElement);
 }
+// data-search-authors.appendChild(authors)
 const genreSelect = document.querySelector("[data-search-genres]");
-for (const genreId in genres) {
-  const optionElement = document.createElement('option')
-  optionElement.value = genreId
-  optionElement.textContent = genres[genreId]
+const allGenresOption = document.createElement('option');
+allGenresOption.value = 'any';
+allGenresOption.innerText = 'All Genres';
+genreSelect.appendChild(allGenresOption);
+for (const [genreId, genreName] of Object.entries(genres)) {
+  const optionElement = document.createElement('option');
+  optionElement.value = genreId;
+  optionElement.textContent = genreName;
 //  console.log( optionElement.value +' '+ optionElement.textContent)
   genreSelect.appendChild(optionElement)
 }
@@ -112,6 +122,54 @@ saveButton.addEventListener('click', (event) =>{
     appoverlays.settingsOverlay.close()
   }
 } )
+// Show more button
+const showMoreButton = document.querySelector('[data-list-button]')
+ // Update the text of the "Show More" button to display how many more items will be displayed
+const numItemsToShow = Math.min(books.length - endIndex,)
+const showMoreButtonText = `Show More <span style="opacity: 0.5">(${numItemsToShow})</span>`
+showMoreButton.innerHTML = showMoreButtonText;
+showMoreButton.addEventListener('click', () => {
+    const fragment = document.createDocumentFragment()
+    startIndex += 36;
+    endIndex += 36;
+    const startIndex1 = startIndex
+    const endIndex1 = endIndex
+    const extracted = books.slice(startIndex1, endIndex1)
+    for (const {author ,image, title, id , description, published} of extracted) {
+        const preview = document.createElement('dl')
+        preview.className = 'preview'
+        preview.dataset.id = id
+        preview.dataset.title = title
+        preview.dataset.image = image
+        preview.dataset.subtitle = `${authors[author]} (${(new Date(published)).getFullYear()})`
+        preview.dataset.description = description
+        // preview.dataset.genre = genres
+        preview.innerHTML= /*html*/`
+        <div>
+        <image class='preview__image' src="${image}" alt="book pic"}/>
+        </div>
+        <div class='preview__info'>
+        <dt class='preview__title'>${title}<dt>
+        <dt class='preview__author'> By ${authors[author]}</dt>
+        </div>`
+        fragment.appendChild(preview)
+    }
+    const booklist1 = document.querySelector('[data-list-items]')
+    booklist1.appendChild(fragment)
+    // Update the text of the "Show More" button to display how many more items will be displayed
+    const numItemsToShow = Math.min(books.length - endIndex,)
+const showMoreButtonText = `Show More <span style="opacity: 0.5">(${numItemsToShow})</span>`
+showMoreButton.innerHTML = showMoreButtonText;
+  })
+
+
+
+
+
+
+
+
+
 
 
 
