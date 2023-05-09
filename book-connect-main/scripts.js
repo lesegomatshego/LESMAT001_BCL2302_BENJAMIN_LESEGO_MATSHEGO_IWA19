@@ -103,7 +103,7 @@ for (const [genreId, genreName] of Object.entries(genres)) {
   const optionElement = document.createElement('option');
   optionElement.value = genreId;
   optionElement.textContent = genreName;
-//  console.log( optionElement.value +' '+ optionElement.textContent)
+
   genreSelect.appendChild(optionElement)
 }
 //change themes
@@ -114,14 +114,20 @@ saveButton.addEventListener('click', (event) =>{
   if (dataSettingsTheme.value === 'day') {
     document.querySelector('body').style.setProperty('--color-dark', day.dark)
     document.querySelector('body').style.setProperty('--color-light', day.light)
-    appoverlays.settingsOverlay.close()
+    if(typeof appoverlays !== 'undefined') {
+      appoverlays.settingsOverlay.close()
+    }
+    
   }
   if (dataSettingsTheme.value === 'night') {
     document.querySelector('body').style.setProperty('--color-dark', night.dark)
     document.querySelector('body').style.setProperty('--color-light', night.light)
+    if(typeof appoverlays !== 'undefined') {
     appoverlays.settingsOverlay.close()
   }
-} )
+} 
+})
+
 // Show more button
 const showMoreButton = document.querySelector('[data-list-button]')
  // Update the text of the "Show More" button to display how many more items will be displayed
